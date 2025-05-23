@@ -26,7 +26,7 @@ public class CategoriaService {
 
     //metodo para obtener categorias por id
 
-    public Optional<Categoria> obtenerCategoriaPorId(){
+    public Optional<Categoria> obtenerCategoriaPorId(Long id){
         return categoriaRepository.findById(id);
     }
 
