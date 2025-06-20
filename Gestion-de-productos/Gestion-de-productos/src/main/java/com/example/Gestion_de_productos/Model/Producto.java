@@ -1,7 +1,5 @@
 package com.example.Gestion_de_productos.Model;
 
-import java.util.Map;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
