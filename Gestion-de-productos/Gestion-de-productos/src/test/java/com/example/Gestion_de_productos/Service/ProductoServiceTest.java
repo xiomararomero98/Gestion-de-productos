@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
@@ -103,10 +104,15 @@ public class ProductoServiceTest {
         assertThat(resultado.getNombreEstado()).isEqualTo("Activo");
     }
 
-    @Test
-    void eliminarProducto_eliminaPorId() {
-        productoService.eliminarProducto(1L);
+@Test
+void eliminarProducto_eliminaPorId() {
+    Producto producto = new Producto(1L, "Loción", "Suave", "18000", "5", categoria, 1L, null);
 
-        verify(productoRepository, times(1)).deleteById(1L);
-    }
+    when(productoRepository.existsById(1L)).thenReturn(true);
+    doNothing().when(productoRepository).deleteById(1L);
+
+    productoService.eliminarProducto(1L);
+
+    verify(productoRepository, times(1)).deleteById(1L);
+}
 }

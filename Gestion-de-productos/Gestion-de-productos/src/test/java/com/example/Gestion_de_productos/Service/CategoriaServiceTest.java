@@ -71,10 +71,13 @@ public class CategoriaServiceTest {
         assertThat(resultado.getNombre()).isEqualTo("Perfume de hombre");
     }
 
-    @Test
-    void eliminarCategoria_eliminaCategoria() {
-        categoriaService.eliminarCategoria(1L);
+@Test
+void eliminarCategoria_eliminaCategoria() {
+    when(categoriaRepository.existsById(1L)).thenReturn(true);
+    doNothing().when(categoriaRepository).deleteById(1L);
 
-        verify(categoriaRepository, times(1)).deleteById(1L);
-    }
+    categoriaService.eliminarCategoria(1L);
+
+    verify(categoriaRepository, times(1)).deleteById(1L);
+}
 }

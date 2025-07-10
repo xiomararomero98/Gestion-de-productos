@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -76,18 +78,18 @@ public class ProductoControllerTest {
     }
 
     @Test
-    void crearProducto_conError() throws Exception {
-        Producto producto = new Producto(null, "Loción", "Suave", "18000", "5", categoria, 99L, null);
+void crearProducto_conError() throws Exception {
+    Producto producto = new Producto(null, "Loción", "Suave", "18000", "5", categoria, 99L, null);
 
-        when(productoService.saveProducto(any(Producto.class)))
-                .thenThrow(new RuntimeException("Estado no válido"));
+    when(productoService.saveProducto(any(Producto.class)))
+            .thenThrow(new RuntimeException("Estado no válido"));
 
-        mockMvc.perform(post("/api/v1/productos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(producto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Error al crear el producto")));
-    }
+    mockMvc.perform(post("/api/v1/productos")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(producto)))
+            .andExpect(status().isConflict()) // usa 409 porque así lo configuraste en el controller
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Error al crear el producto")));
+}
 
     @Test
     void actualizarProducto_exitoso() throws Exception {
